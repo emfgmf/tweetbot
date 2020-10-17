@@ -4,9 +4,7 @@ from tweepy import Cursor
 import time
 import os
 
-LAST_SEEN_FILE_PATH = 'last_seen.txt'
 RETWEET_USER = 'RetweetTrigger' # 'Int_SORSE'
-LAST_TWEET = 1317569181202735110
 
 # Our consumer key
 # consumer_key = secrets["consumer_key"]
@@ -28,7 +26,7 @@ auth.set_access_token(key, secret)
 # Get the API object using the defined authentication
 api = API(auth)
 
-def reply():
+def reply(LAST_TWEET):
     # Get all (available) status texts by Int_SORSE after last seen tweet id
     new_tweets = []
     new_statuses = Cursor(api.user_timeline, id=RETWEET_USER, since_id=LAST_TWEET).items()
@@ -48,6 +46,9 @@ def reply():
             # Retweet
             api.retweet(id)
 
-while True:
-    reply()
-    time.sleep(60)
+if __name__ == "__main__":
+    LAST_TWEET = 1317569181202735110
+
+    while True:
+        reply(LAST_TWEET)
+        time.sleep(60)
