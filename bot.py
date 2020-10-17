@@ -4,6 +4,7 @@ from tweepy import Cursor
 import time
 import os
 
+LAST_SEEN_FILE_PATH = './last_seen.txt'
 RETWEET_USER = 'RetweetTrigger' # 'Int_SORSE'
 
 # Our consumer key
@@ -26,10 +27,22 @@ auth.set_access_token(key, secret)
 # Get the API object using the defined authentication
 api = API(auth)
 
-def reply(LAST_TWEET):
+def read_last_seen():
+    # Read file
+    with open(LAST_SEEN_FILE_PATH, 'r') as file:
+        last_seen_id = int(file.read().strip())
+        return last_seen_id
+
+def write_last_seen(last_seen_id):
+    with open(LAST_SEEN_FILE_PATH, 'w') as file:
+        file.write(str(last_seen_id))
+    return
+        
+def reply():
     # Get all (available) status texts by Int_SORSE after last seen tweet id
+    id = read_last_seen()
     new_tweets = []
-    new_statuses = Cursor(api.user_timeline, id=RETWEET_USER, since_id=LAST_TWEET).items()
+    new_statuses = Cursor(api.user_timeline, id=RETWEET_USER, since_id=id).items()
 
     # Add all new statuses since the last seen to list
     for status in new_statuses:
@@ -38,7 +51,7 @@ def reply(LAST_TWEET):
     # If there were any new tweets, retweet them
     if len(new_tweets) > 0:
         # Write last status
-        LAST_TWEET = new_tweets[0]
+        write_last_seen(new_tweets[0])
 
         for id in reversed(new_tweets):
             # Favourite this tweet
@@ -46,9 +59,6 @@ def reply(LAST_TWEET):
             # Retweet
             api.retweet(id)
 
-if __name__ == "__main__":
-    LAST_TWEET = 1317569181202735110
-
-    while True:
-        reply(LAST_TWEET)
-        time.sleep(60)
+while True:
+    reply()
+    time.sleep(60)
