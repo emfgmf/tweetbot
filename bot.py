@@ -4,7 +4,7 @@ from tweepy import Cursor
 import time
 import os
 
-LAST_SEEN_FILE_PATH = './last_seen.txt'
+LAST_SEEN_FILE_PATH = 'last_seen.txt'
 RETWEET_USER = 'RetweetTrigger' # 'Int_SORSE'
 
 # Our consumer key
