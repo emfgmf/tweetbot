@@ -7,20 +7,18 @@ import os
 LAST_SEEN_FILE_PATH = './last_seen.txt'
 RETWEET_USER = 'RetweetTrigger' # 'Int_SORSE'
 
+# The following four variables must be available as environment variables
 # Our consumer key
-# consumer_key = secrets["consumer_key"]
-consumer_key = os.environ['CONSUMER_KEY']
+consumer_key = os.environ['API_KEY']
 # Our consumer secret
-# consumer_secret = secrets["consumer_secret"]
-consumer_secret = os.environ['CONSUMER_SECRET']
+consumer_secret = os.environ['API_KEY_SECRET']
 # Our access token
-# key = secrets["key"]
-key = os.environ['KEY']
+key = os.environ['ACCESS_TOKEN']
 # Our access token secret
-# secret = secrets["secret"]
-secret = os.environ['SECRET']
+secret = os.environ['ACCESS_TOKEN_SECRET']
 
 # Authenticate using OAuth 1a authentication
+# See http://docs.tweepy.org/en/v3.9.0/auth_tutorial.html#oauth-1a-authentication
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(key, secret)
 
